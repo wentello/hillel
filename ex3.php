@@ -46,7 +46,7 @@ class ValueObject
         if ($color >= 0 && $color <= 255 && is_int($color)) {
             return $color;
         } else {
-            throw new InvalidArgumentException('Wrong color value' . $color);
+            throw new InvalidArgumentException('Wrong color value');
         }
     }
 
