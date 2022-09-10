@@ -6,44 +6,47 @@ class ValueObject
     private $green;
     private $blue;
 
-    public function __construct($red,$green,$blue)
+    public function __construct($red, $green, $blue)
     {
         $this->setBlue($blue);
         $this->setGreen($green);
         $this->setRed($red);
     }
 
-    static public function random(){
-        self::setRed(rand(0, 255));
-        self::setBlue(rand(0, 255));
-        self::setGreen(rand(0, 255));
-        return self;
+    static public function random()
+    {
+        return new ValueObject(rand(0, 255), rand(0, 255), rand(0, 255));
     }
 
-    public function mix(ValueObject ...$arrObjects){
-        foreach ($arrObjects as $obj){
-            echo $obj->getBlue();
-        }
+    public function mix(ValueObject $objects)
+    {
+        return new ValueObject(
+            (int)(($this->getRed() + $objects->getRed()) / 2),
+            (int)(($this->getGreen() + $objects->getGreen()) / 2),
+            (int)(($this->getBlue() + $objects->getBlue()) / 2)
+        );
     }
 
-    public function equals(ValueObject $obj){
-        if(
+    public function equals(ValueObject $obj)
+    {
+        if (
             $this->getBlue() === $obj->getBlue() &&
             $this->getRed() === $obj->getRed() &&
             $this->getGreen() === $obj->getGreen()
-        ){
+        ) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     //check color range
-    private function checkRange($color){
-        if($color >=0 && $color <= 255){
+    private function checkRange($color)
+    {
+        if ($color >= 0 && $color <= 255 && is_int($color)) {
             return $color;
-        }else{
-            throw new InvalidArgumentException('Wrong color value');
+        } else {
+            throw new InvalidArgumentException('Wrong color value' . $color);
         }
     }
 
@@ -94,10 +97,4 @@ class ValueObject
     {
         $this->blue = $this->checkRange($blue);
     }
-
-
 }
-
-$c = new ValueObject(123, 122, 145);
-echo $c->getBlue();
-var_dump(ValueObject::random());
