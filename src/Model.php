@@ -2,17 +2,14 @@
 
 namespace Hillel;
 
-use InvalidArgumentException;
-
-class Model
+abstract class Model
 {
     public $id;
-    public $name;
-    public $email;
     public $sql;
 
-    public function __construct()
+    public function __toString()
     {
+        return $this->sql;
     }
 
     public function findUser($id)
@@ -56,6 +53,16 @@ class Model
     public function update()
     {
         $this->sql = ($this->getQuery("UPDATE {$this->getTable()} SET name = :name, email = :email WHERE id = :id"));
+        return $this;
+    }
+
+    public function save()
+    {
+        if ($this->id) {
+            $this->update();
+        } else {
+            $this->create();
+        }
         return $this;
     }
 }

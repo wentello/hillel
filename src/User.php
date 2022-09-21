@@ -4,10 +4,8 @@ namespace Hillel;
 
 final class User extends Model
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    public $name;
+    public $email;
 
     static public function find($id)
     {
@@ -15,15 +13,5 @@ final class User extends Model
         $user->findUser($id);
 
         return $user;
-    }
-
-    public function save()
-    {
-        if ($this->id) {
-            $this->update();
-        } else {
-            $this->create();
-        }
-        return $this;
     }
 }
