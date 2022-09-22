@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $table = 'posts';
-
-    public function orders()
+    public function tags()
     {
         return $this->belongsToMany(Tag::class, 'post_tag');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id');
     }
 }

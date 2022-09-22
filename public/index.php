@@ -40,11 +40,11 @@ $model->delete();*/
 }*/
 
 //5. Оновити 1 пост, замінивши поля + категорію.
-/*$post = Post::find(3);
+/*$post = Post::find(13);
 $post->title = 'title99';
 $post->slug = 'slug99';
 $post->body = 'body99';
-$post->category_id = 2;
+$post->category_id = 4;
 $post->save();*/
 
 //6. Видалити пост.
@@ -68,6 +68,15 @@ $post->delete();*/
     $post = Post::find($i);
     for($j=1; $j<4; $j++) {
         $tag = Tag::find(rand(1,10));
-        $post->orders()->save($tag);
+        $post->tags()->save($tag);
     }
 }*/
+
+/*$tag = Tag::find(8);
+var_dump($tag->posts()->get());*/
+
+/*$post = Post::find(14);
+var_dump($post->category()->get());*/
+
+/*$category = Category::find(1);
+var_dump($category->posts()->get());*/
