@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <a href="/category.php" class="btn btn-primary">Categories</a>
-        <a href="/tags.php" class="btn btn-primary">Tags</a>
+        <a href="/category" class="btn btn-primary">Categories</a>
+        <a href="/tags" class="btn btn-primary">Tags</a>
     </div>
 @endsection
