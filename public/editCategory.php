@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $pageTitle = 'Update Categories';
 
 /** @var $blade */
-echo $blade->make('tags/update-category', [
+echo $blade->make('category/update-category', [
     'pageTitle' => $pageTitle,
     'title' => $title,
     'slug' => $slug,
