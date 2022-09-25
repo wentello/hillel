@@ -44,10 +44,19 @@ class CategoryController
     public function saveCategory()
     {
         $request = request();
-        $category = new Category;
-        $category->title = $request->input('title');
-        $category->slug = $request->input('slug');
-        $category->save();
+        $id = $request->input('id');
+        if($id){
+            $category = Category::find($id);
+            $category->title = $request->input('title');
+            $category->slug = $request->input('slug');
+            $category->update();
+        }else{
+            $category = new Category;
+            $category->title = $request->input('title');
+            $category->slug = $request->input('slug');
+            $category->save();
+        }
+
 
         return new RedirectResponse('/category');
     }

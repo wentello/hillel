@@ -27,8 +27,18 @@ function router()
 }
 
 $router->get('/', [MainCategory::class, 'index']);
+
 $router->get('/category', [CategoryController::class, 'index']);
 $router->get('/addCategory', [CategoryController::class, 'addCategory']);
 $router->post('/addCategory', [CategoryController::class, 'saveCategory']);
 $router->get('/deleteCategory', [CategoryController::class, 'deleteCategory']);
 $router->get('/editCategory', [CategoryController::class, 'editCategory']);
+$router->post('/editCategory', [CategoryController::class, 'saveCategory']);
+
+$router->get('/tags', [TagController::class, 'index']);
+$router->get('/addTag', [TagController::class, 'addTag']);
+$router->post('/addTag', [TagController::class, 'saveTag']);
+$router->get('/deleteTag', [TagController::class, 'deleteTag']);
+$router->get('/editTag', [TagController::class, 'editTag']);
+$router->post('/editTag', [TagController::class, 'saveTag']);
+
