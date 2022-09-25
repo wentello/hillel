@@ -6,7 +6,6 @@
 
 @section('content')
     <form method="post">
-        <input type="hidden" name="id" value="{{ $id }}">
         <div class="container">
             <div class="row">
                 <div class="col">

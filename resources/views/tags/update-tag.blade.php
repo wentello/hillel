@@ -1,11 +1,12 @@
 @extends("layout")
 
 @section('title')
-    <h1>{{ $pageTitle }}</h1>
+<h1>{{ $pageTitle }}</h1>
 @endsection
 
 @section('content')
 <form method="post">
+    <input type="hidden" name="id" value="{{ $id }}">
     <div class="container">
         <div class="row">
             <div class="col">
