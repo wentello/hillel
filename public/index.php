@@ -78,5 +78,5 @@ var_dump($tag->posts()->get());*/
 /*$post = Post::find(14);
 var_dump($post->category()->get());*/
 
-/*$category = Category::find(1);
+/*$category = Category::find(4);
 var_dump($category->posts()->get());*/
