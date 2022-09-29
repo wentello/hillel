@@ -3,6 +3,7 @@
 namespace Hillel\Controllers;
 
 use \Hillel\Models\Category;
+use Hillel\Models\Post;
 use Illuminate\Http\RedirectResponse;
 
 class CategoryController
@@ -21,8 +22,17 @@ class CategoryController
     public function deleteCategory()
     {
         $request = request();
-        $category = Category::find($request->input('id'));
+        $id = $request->input('id');
+        if (empty($id)) {
+            return new RedirectResponse('/category');
+        }
+        $category = Category::find($id);
+        $category->postsTags()->delete();
+
+        $category = Category::find($id);
+        $category->posts()->delete();
         $category->delete();
+
         return new RedirectResponse('/category');
     }
 
@@ -30,7 +40,13 @@ class CategoryController
     {
         $request = request();
         $pageTitle = 'Update Categories';
-        $category = Category::find($request->input('id'));
+        if (empty($id)) {
+            return new RedirectResponse('/category');
+        }
+        $category = Category::find($id);
+        if (empty($category->$id)) {
+            return new RedirectResponse('/category');
+        }
         $title = $category->title;
         $slug = $category->slug;
         return view('category/update-category', [
@@ -45,7 +61,7 @@ class CategoryController
     {
         $request = request();
         $id = $request->input('id');
-        if($id){
+        if (!empty($id)) {
             $category = Category::find($id);
             $category->title = $request->input('title');
             $category->slug = $request->input('slug');

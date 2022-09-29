@@ -2,6 +2,11 @@
     "name": "vital/hillel",
     "type": "project",
     "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hillel\\": "src"
+        }
+    },
     "authors": [
         {
             "name": "vitaliy",

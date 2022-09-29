@@ -21,7 +21,11 @@ class TagController
     public function deleteTag()
     {
         $request = request();
-        $tag = Tag::find($request->input('id'));
+        $id = $request->input('id');
+        if (empty($id)) {
+            return new RedirectResponse('/tags');
+        }
+        $tag = Tag::find($id);
         $tag->delete();
         return new RedirectResponse('/tags');
     }
@@ -30,7 +34,14 @@ class TagController
     {
         $request = request();
         $pageTitle = 'Update Tag';
-        $tag = Tag::find($request->input('id'));
+        $id = $request->input('id');
+        if (empty($id)) {
+            return new RedirectResponse('/tags');
+        }
+        $tag = Tag::find($id);
+        if (empty($tag->$id)) {
+            return new RedirectResponse('/tags');
+        }
         $title = $tag->title;
         $slug = $tag->slug;
         return view('tags/update-tag', [
@@ -45,12 +56,12 @@ class TagController
     {
         $request = request();
         $id = $request->input('id');
-        if($id){
+        if (!empty($id)) {
             $tag = Tag::find($id);
             $tag->title = $request->input('title');
             $tag->slug = $request->input('slug');
             $tag->update();
-        }else{
+        } else {
             $tag = new Tag;
             $tag->title = $request->input('title');
             $tag->slug = $request->input('slug');
