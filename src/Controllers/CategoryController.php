@@ -40,11 +40,12 @@ class CategoryController
     {
         $request = request();
         $pageTitle = 'Update Categories';
+        $id = $request->input('id');
         if (empty($id)) {
             return new RedirectResponse('/category');
         }
         $category = Category::find($id);
-        if (empty($category->$id)) {
+        if (empty($category)) {
             return new RedirectResponse('/category');
         }
         $title = $category->title;
@@ -61,12 +62,18 @@ class CategoryController
     {
         $request = request();
         $id = $request->input('id');
+        if(empty($id)){
+            return new RedirectResponse('/category');
+        }
+        if (empty($request->input('title')) || empty($request->input('slug'))) {
+            return new RedirectResponse('/editCategory?id=' . $id);
+        }
         if (!empty($id)) {
             $category = Category::find($id);
             $category->title = $request->input('title');
             $category->slug = $request->input('slug');
             $category->update();
-        }else{
+        } else {
             $category = new Category;
             $category->title = $request->input('title');
             $category->slug = $request->input('slug');

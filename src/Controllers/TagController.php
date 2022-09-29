@@ -39,7 +39,7 @@ class TagController
             return new RedirectResponse('/tags');
         }
         $tag = Tag::find($id);
-        if (empty($tag->$id)) {
+        if (empty($tag)) {
             return new RedirectResponse('/tags');
         }
         $title = $tag->title;
@@ -56,6 +56,12 @@ class TagController
     {
         $request = request();
         $id = $request->input('id');
+        if(empty($id)){
+            return new RedirectResponse('/tags');
+        }
+        if (empty($request->input('title')) || empty($request->input('slug'))) {
+            return new RedirectResponse('/editTag?id=' . $id);
+        }
         if (!empty($id)) {
             $tag = Tag::find($id);
             $tag->title = $request->input('title');
