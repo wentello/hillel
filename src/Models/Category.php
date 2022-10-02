@@ -13,6 +13,7 @@ class Category extends Model
 
     public function postsTags()
     {
-        return $this->hasManyThrough('post_tag', Post::class);
+        return $this->hasManyThrough(PostTag::class, Post::class);
+//        return $this->hasMany('post_tag');
     }
 }

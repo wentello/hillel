@@ -29,8 +29,6 @@ class CategoryController
         $category = Category::find($id);
         $category->postsTags()->delete();
 
-        $category = Category::find($id);
-        $category->posts()->delete();
         $category->delete();
 
         return new RedirectResponse('/category');
