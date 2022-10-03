@@ -7,6 +7,7 @@ use \Hillel\Models\Category;
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['id'])) {
     $category = Category::find($_GET['id']);
+    $category->posts()->delete();
     $category->delete();
 }
 header('location:/category.php');
