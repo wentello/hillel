@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Hillel\Controllers\MainCategory;
 use Hillel\Controllers\CategoryController;
 use Hillel\Controllers\TagController;
+use Hillel\Controllers\PostController;
 
 $request = Request::createFromGlobals();
 
@@ -29,16 +30,22 @@ function router()
 $router->get('/', [MainCategory::class, 'index']);
 
 $router->get('/category', [CategoryController::class, 'index']);
-$router->get('/addCategory', [CategoryController::class, 'addCategory']);
-$router->post('/addCategory', [CategoryController::class, 'saveCategory']);
-$router->get('/deleteCategory', [CategoryController::class, 'deleteCategory']);
-$router->get('/editCategory', [CategoryController::class, 'editCategory']);
-$router->post('/editCategory', [CategoryController::class, 'saveCategory']);
+$router->get('/category/create', [CategoryController::class, 'create']);
+$router->post('/category/store', [CategoryController::class, 'save']);
+$router->get('/category/{id}/delete', [CategoryController::class, 'delete']);
+$router->get('/category/{id}/edit/', [CategoryController::class, 'edit']);
+$router->post('/category/update', [CategoryController::class, 'save']);
 
 $router->get('/tags', [TagController::class, 'index']);
-$router->get('/addTag', [TagController::class, 'addTag']);
-$router->post('/addTag', [TagController::class, 'saveTag']);
-$router->get('/deleteTag', [TagController::class, 'deleteTag']);
-$router->get('/editTag', [TagController::class, 'editTag']);
-$router->post('/editTag', [TagController::class, 'saveTag']);
+$router->get('/tags/create', [TagController::class, 'create']);
+$router->post('/tags/store', [TagController::class, 'save']);
+$router->get('/tags/{id}/delete', [TagController::class, 'delete']);
+$router->get('/tags/{id}/edit', [TagController::class, 'edit']);
+$router->post('/tags/update', [TagController::class, 'save']);
 
+$router->get('/post', [PostController::class, 'index']);
+$router->get('/post/create', [PostController::class, 'create']);
+$router->post('/post/store', [PostController::class, 'save']);
+$router->get('/post/{id}/delete', [PostController::class, 'delete']);
+$router->get('/post/{id}/edit', [PostController::class, 'edit']);
+$router->post('/post/update', [PostController::class, 'save']);

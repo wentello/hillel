@@ -3,8 +3,8 @@
 namespace Hillel\Controllers;
 
 use \Hillel\Models\Category;
-use Hillel\Models\Post;
 use Illuminate\Http\RedirectResponse;
+
 
 class CategoryController
 {
@@ -13,87 +13,84 @@ class CategoryController
         $title = 'Categories';
         $categories = Category::all();
 
-        return view('category/list-categories', [
+        return view('category/list', [
             'title' => $title,
             'categories' => $categories,
         ]);
     }
 
-    public function deleteCategory()
+    public function delete($id)
     {
-        $request = request();
-        $id = $request->input('id');
         if (empty($id)) {
             return new RedirectResponse('/category');
         }
         $category = Category::find($id);
-        $category->postsTags()->delete();
-
+        $category->posts()->delete();
         $category->delete();
 
         return new RedirectResponse('/category');
     }
 
-    public function editCategory()
+    public function edit($id)
     {
-        $request = request();
         $pageTitle = 'Update Categories';
-        $id = $request->input('id');
+
         if (empty($id)) {
             return new RedirectResponse('/category');
         }
-        $category = Category::find($id);
-        if (empty($category)) {
+        $data = !empty($_SESSION['data']) ? $_SESSION['data'] : Category::find($id);
+        if (empty($data)) {
             return new RedirectResponse('/category');
         }
-        $title = $category->title;
-        $slug = $category->slug;
-        return view('category/update-category', [
-            'pageTitle' => $pageTitle,
-            'title' => $title,
-            'slug' => $slug,
-            'id' => $request->input('id'),
-        ]);
+
+        return view('category/edit', compact('pageTitle','data', 'id'));
     }
 
-    public function saveCategory()
+    public function save()
     {
-        $request = request();
-        $id = $request->input('id');
-        if(empty($id)){
-            return new RedirectResponse('/category');
+        $data = request()->all();
+
+        $validator = validator()->make($data, [
+            'title' => [
+                'required',
+                'min:3',
+            ],
+            'slug' => [
+                'required',
+                'min:3',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            $_SESSION['errors'] = $validator->errors()->toArray();
+            $_SESSION['data'] = $data;
+            return new RedirectResponse($_SERVER['HTTP_REFERER']);
         }
-        if (empty($request->input('title')) || empty($request->input('slug'))) {
-            return new RedirectResponse('/editCategory?id=' . $id);
-        }
-        if (!empty($id)) {
-            $category = Category::find($id);
-            $category->title = $request->input('title');
-            $category->slug = $request->input('slug');
+
+        if (!empty($data['id'])) {
+            $category = Category::find($data['id']);
+            $category->title = $data['title'];
+            $category->slug = $data['slug'];
             $category->update();
         } else {
             $category = new Category;
-            $category->title = $request->input('title');
-            $category->slug = $request->input('slug');
+            $category->title = $data['title'];
+            $category->slug = $data['slug'];
             $category->save();
         }
-
 
         return new RedirectResponse('/category');
     }
 
-    public function addCategory()
+    public function create()
     {
-        $request = request();
-        $title = $request->input('title');
-        $slug = $request->input('slug');
+        $data = !empty($_SESSION['data']) ? $_SESSION['data'] : [];
+        if (empty($data)) {
+            $data = ['title' => '', 'slug' => ''];
+        }
 
         $pageTitle = 'Add Categories';
 
-        return view('category/create-category', [
-            'pageTitle' => $pageTitle,
-            'title' => $title,
-            'slug' => $slug,
-        ]);
+        return view('category/create', compact('pageTitle','data'));
     }
 }

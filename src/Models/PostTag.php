@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostTag extends Model
 {
-    public $table = 'post_tag';
+    protected $table = 'post_tag';
+
+    public function posts()
+    {
+        return $this->belongsTo(Post::class, 'post_tag');
+    }
 }

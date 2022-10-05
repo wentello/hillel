@@ -11,9 +11,4 @@ class Category extends Model
         return $this->hasMany(Post::class);
     }
 
-    public function postsTags()
-    {
-        return $this->hasManyThrough(PostTag::class, Post::class);
-//        return $this->hasMany('post_tag');
-    }
 }

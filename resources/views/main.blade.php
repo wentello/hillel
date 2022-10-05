@@ -8,5 +8,6 @@
     <div class="container">
         <a href="/category" class="btn btn-primary">Categories</a>
         <a href="/tags" class="btn btn-primary">Tags</a>
+        <a href="/post" class="btn btn-primary">Post</a>
     </div>
 @endsection

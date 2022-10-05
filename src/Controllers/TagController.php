@@ -2,7 +2,9 @@
 
 namespace Hillel\Controllers;
 
+use Hillel\Models\Post;
 use \Hillel\Models\Tag;
+use \Hillel\Models\PostTag;
 use Illuminate\Http\RedirectResponse;
 
 class TagController
@@ -12,84 +14,97 @@ class TagController
         $title = 'Categories';
         $tags = Tag::all();
 
-        return view('tags/list-tags', [
-            'title' => $title,
-            'tags' => $tags,
-        ]);
+        $postTags = new PostTag();
+        $postTags->posts();
+        $objPostTags = $postTags->get();
+        $arrPostTags = [];
+        foreach ($objPostTags as $postTag){
+            $arrPostTags[$postTag->tag_id][] = Post::find($postTag->post_id);
+        }
+
+        return view('tags/list', compact('title', 'tags', 'arrPostTags', 'postTags'));
     }
 
-    public function deleteTag()
+    public function delete($id)
     {
-        $request = request();
-        $id = $request->input('id');
         if (empty($id)) {
             return new RedirectResponse('/tags');
         }
         $tag = Tag::find($id);
+        $tag->posts()->detach();
         $tag->delete();
         return new RedirectResponse('/tags');
     }
 
-    public function editTag()
+    public function edit($id)
     {
-        $request = request();
         $pageTitle = 'Update Tag';
-        $id = $request->input('id');
+
         if (empty($id)) {
             return new RedirectResponse('/tags');
         }
-        $tag = Tag::find($id);
-        if (empty($tag)) {
+        $data = !empty($_SESSION['data']) ? $_SESSION['data'] : Tag::find($id);
+        if (empty($data)) {
             return new RedirectResponse('/tags');
         }
-        $title = $tag->title;
-        $slug = $tag->slug;
-        return view('tags/update-tag', [
-            'pageTitle' => $pageTitle,
-            'title' => $title,
-            'slug' => $slug,
-            'id' => $request->input('id'),
-        ]);
+        $posts = Post::all();
+        return view('tags/edit', compact('pageTitle','data', 'id', 'posts'));
     }
 
-    public function saveTag()
+    public function save()
     {
-        $request = request();
-        $id = $request->input('id');
-        if(empty($id)){
-            return new RedirectResponse('/tags');
-        }
-        if (empty($request->input('title')) || empty($request->input('slug'))) {
-            return new RedirectResponse('/editTag?id=' . $id);
-        }
-        if (!empty($id)) {
-            $tag = Tag::find($id);
-            $tag->title = $request->input('title');
-            $tag->slug = $request->input('slug');
-            $tag->update();
-        } else {
-            $tag = new Tag;
-            $tag->title = $request->input('title');
-            $tag->slug = $request->input('slug');
-            $tag->save();
+        $data = request()->all();
+
+        $validator = validator()->make($data, [
+            'title' => [
+                'required',
+                'min:3',
+            ],
+            'slug' => [
+                'required',
+                'min:3',
+            ],
+            'post_id' => [
+                'required',
+                'numeric',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            $_SESSION['errors'] = $validator->errors()->toArray();
+            $_SESSION['data'] = $data;
+            return new RedirectResponse($_SERVER['HTTP_REFERER']);
         }
 
+        if (!empty($data['id'])) {
+            $tag = Tag::find($data['id']);
+            $tag->title = $data['title'];
+            $tag->slug = $data['slug'];
+            $tag->update();
+            $tag->posts()->detach();
+
+            $postTag = new PostTag;
+            $postTag->post_id = $data['post_id'];
+            $postTag->tag_id = $data['id'];
+            $postTag->save();
+        } else {
+            $tag = new Tag;
+            $tag->title = $data['title'];
+            $tag->slug = $data['slug'];
+            $tag->save();
+        }
 
         return new RedirectResponse('/tags');
     }
 
-    public function addTag()
+    public function create()
     {
-        $request = request();
-        $title = $request->input('title');
-        $slug = $request->input('slug');
-
+        $data = !empty($_SESSION['data']) ? $_SESSION['data'] : [];
+        if (empty($data)) {
+            $data = ['title' => '', 'slug' => ''];
+        }
         $pageTitle = 'Add Tag';
 
-        return view('tags/create-tag', [
-            'pageTitle' => $pageTitle,
-            'title' => $title,
-            'slug' => $slug,
-        ]);
+        return view('tags/create', compact('pageTitle','data'));
     }
 }
