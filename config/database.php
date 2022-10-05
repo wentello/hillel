@@ -4,13 +4,13 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 $capsule = new Capsule;
 
 $capsule->addConnection([
-    'driver' => 'mysql',
-    'host' => 'localhost',
-    'database' => 'ex6',
-    'username' => 'homestead',
-    'password' => 'secret',
-    'charset' => 'utf8',
-    'collation' => 'utf8_unicode_ci',
+    'driver' => env('DATABASE_DRIVER'),
+    'host' => env('DATABASE_HOST'),
+    'database' => env('DATABASE_NAME'),
+    'username' => env('DATABASE_USERNAME'),
+    'password' => env('DATABASE_PASSWORD'),
+    'charset' => env('DATABASE_CHARSET'),
+    'collation' => env('DATABASE_COLLATION'),
     'prefix' => '',
 ]);
 

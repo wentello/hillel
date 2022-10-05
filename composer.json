@@ -18,6 +18,7 @@
         "illuminate/events": "^9.31",
         "illuminate/view": "^9.31",
         "illuminate/routing": "^9.31",
-        "illuminate/validation": "^9.33"
+        "illuminate/validation": "^9.33",
+        "vlucas/phpdotenv": "^5.4"
     }
 }
